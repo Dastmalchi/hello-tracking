@@ -2,18 +2,28 @@
 
 from django.shortcuts import render
 from django.conf import settings
+
 import utils
 import aftership
 
 
+# TODOs
+# Add shipment_pickup_date
+# Add shipment_type
+# Add tag to get current status
+# Get list of possible trackings for final status
+# Map Shopify carriers to Aftership carriers in JS
+# Sanitize request.GET in template
+
 def index(request):
     """Index."""
-    # return HttpResponse('Hello from Python!')
+    # import pdb
+    # pdb.set_trace()
     return render(request, 'index.html')
 
 
 @utils.json_response
-def checkpoints(request, carrier_slug, tracking_number):
+def trackings(request, carrier_slug, tracking_number):
     """Checkpoints."""
     api = aftership.APIv4(getattr(settings, "AFTERSHIP_API_KEY", None))
     checkpoints = []
@@ -39,14 +49,9 @@ def checkpoints(request, carrier_slug, tracking_number):
             checkpoints.append(checkpoint)
 
     response['checkpoints'] = checkpoints
-    # response['expected_delivery'] = \
-    #     response['expected_delivery'].strftime("%s")
 
-    # import pprint
-    # # pprint.pprint(raw_tracking['tracking']['checkpoints'])
-    # pprint.pprint(checkpoints)
+    if response['expected_delivery'] is not None:
+        response['expected_delivery'] = \
+            response['expected_delivery'].strftime("%s")
 
     return response
-    # return {'this will be': 'JSON',
-    #         'carrier_slug': carrier_slug,
-    #         'tracking_number': tracking_number}
