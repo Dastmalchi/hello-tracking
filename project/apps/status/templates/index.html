@@ -2,7 +2,77 @@
 {% load staticfiles %}
 
 {% block content %}
-<br>
+
+<style>
+.hello-tracking {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.hello-tracking .row .checkpoints ,
+.hello-tracking .row .expected-delivery ,
+.hello-tracking .row .promo {
+  height:500px;
+}
+
+.hello-tracking .row .checkpoints {
+  overflow: scroll;
+}
+
+.hello-tracking .row .checkpoints ul {
+  margin: 0;
+  padding: 0;
+}
+
+.hello-tracking .row .checkpoints ul li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  clear: both;
+  border-bottom: 1px solid #333;
+  padding: 10px 0;
+  display: block;
+  overflow: auto;
+  zoom: 1;
+
+}
+
+.hello-tracking .row .checkpoints ul li .dt {
+  width: 20%;
+  max-width: 80px;
+  float: left;
+  padding-right: 10px;
+}
+
+.hello-tracking .row .checkpoints ul li .status {
+  width: 80%;
+  float: left;
+}
+
+.hello-tracking .row .expected-delivery .date {
+  background: #bfd4e7;
+  padding: 30px;
+}
+
+.hello-tracking .row .expected-delivery .date .dow {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 22px;
+  display: block;
+}
+
+.hello-tracking .row .expected-delivery .date .mon {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20px;
+  display: block;
+}
+
+.hello-tracking .row .expected-delivery .date .day {
+  font-weight: bold;
+  font-size: 100px;
+  display: block;
+}
+</style>
 
 <div class="container hello-tracking">
   <div class="alert alert-info text-center" role="alert">
@@ -11,35 +81,81 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-4">
-      <h2>Checkpoints</h2>
-      <ul class="checkpoints"></ul>
+    <div class="col-md-4 checkpoints">
+      <h2>Tracking</h2>
+      <h3></h3>
+      <!-- <h4>Checkpoints</h4> -->
+      <ul></ul>
     </div>
-    <div class="col-md-4">
-      <h2>Promo #1</h2>
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-4 expected-delivery">
       <h2>Expected Delivery</h2>
-      <p class="expected-delivery"></p>
+      <div class="date"></div>
+    </div>
+    <div class="col-md-4 promo">
+      <img src="{% static 'marketing-image.png'%}">
     </div>
   </div> <!-- row -->
   <div class="row">
     <div class="col-md-12">
-      <h2>Promo #2</h2>
+      <img src="{% static 'marketing-banner.png'%}">
     </div>
   </div>
 </div>
 <script>
   function trackingComplete(args) {
     console.log(args);
-    var $checkpoints = $('.hello-tracking ul.checkpoints');
-    var $expectedDelivery = $('.hello-tracking p.expected-delivery');
+    var $widget = $('div.hello-tracking');
+    var $checkpoints = $('.checkpoints ul', $widget);
+    var $currentStatus = $('.checkpoints h3', $widget);
+    var $expectedDelivery = $('.expected-delivery div.date', $widget);
+    var $expectedDeliveryDow = $('<span class="dow">');
+    var $expectedDeliveryMon = $('<span class="mon">');
+    var $expectedDeliveryDay = $('<span class="day">');
+
+    // https://www.aftership.com/docs/api/4/delivery-status
+    var trackingStatusMatrix = {
+      'Pending': 'Pending',
+      'InfoReceived': 'InfoReceived',
+      'InTransit': 'InTransit',
+      'OutForDelivery': 'Out for Delivery',
+      'AttemptFail': 'AttemptFail',
+      'Delivered': 'Delivered',
+      'Exception': 'Exception',
+      'Expired': 'Expired',
+    }
+
+    // Process Checkpopints
     for  (i in args.checkpoints) {
       var $li = $("<li>");
-      $li.text(args.checkpoints[i].message);
+      var $dt = $("<div class=\"dt\">");
+      var $status = $("<div class=\"status\">");
+      var $msg = $("<div class=\"msg\">");
+      var $loc = $("<div class=\"loc\">");
+
+      var checkpoint = args.checkpoints[i];
+      var dt = checkpoint.checkpoint_time;
+
+      $msg.text(checkpoint.message);
+      $loc.text(checkpoint.location);
+
+      $status.append($msg);
+      $status.append($loc);
+      $dt.append(dt);
+      $li.append($dt);
+      $li.append($status);
       $checkpoints.append($li);
     }
-    $expectedDelivery.text(args.expected_delivery);
+
+    // Delivery Date
+    $expectedDeliveryDow.text(args.expected_delivery.dow);
+    $expectedDeliveryMon.text(args.expected_delivery.mon);
+    $expectedDeliveryDay.text(args.expected_delivery.day);
+    $expectedDelivery.append($expectedDeliveryDow);
+    $expectedDelivery.append($expectedDeliveryMon);
+    $expectedDelivery.append($expectedDeliveryDay);
+
+    // Current Status
+    $currentStatus.text(trackingStatusMatrix[args.tag]);
   }
 </script>
 <script type="text/javascript" src="//localhost:8000/trackings/{{request.GET.carrier}}/{{request.GET.tracking}}/?callback=trackingComplete"></script>

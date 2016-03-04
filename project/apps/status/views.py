@@ -10,8 +10,6 @@ import aftership
 # TODOs
 # Add shipment_pickup_date
 # Add shipment_type
-# Add tag to get current status
-# Get list of possible trackings for final status
 # Map Shopify carriers to Aftership carriers in JS
 # Sanitize request.GET in template
 
@@ -34,7 +32,8 @@ def trackings(request, carrier_slug, tracking_number):
                 'checkpoints',
                 'expected_delivery',
                 'delivery_time',
-                'active'])
+                'active',
+                'tag'])
 
     response = raw_tracking['tracking']
 
@@ -45,13 +44,17 @@ def trackings(request, carrier_slug, tracking_number):
             del checkpoint['zip']
             del checkpoint['country_name']
             checkpoint['checkpoint_time'] = \
-                checkpoint['checkpoint_time'].strftime("%s")
+                checkpoint['checkpoint_time'].strftime("%b %d, %I:%M %p")
             checkpoints.append(checkpoint)
 
+    checkpoints.reverse()
     response['checkpoints'] = checkpoints
 
     if response['expected_delivery'] is not None:
-        response['expected_delivery'] = \
-            response['expected_delivery'].strftime("%s")
+        response['expected_delivery'] = {
+            'dow': response['expected_delivery'].strftime("%A"),
+            'mon': response['expected_delivery'].strftime("%b"),
+            'day': response['expected_delivery'].strftime("%d")
+        }
 
     return response
