@@ -1,0 +1,312 @@
+<div id="page" class="desktop-12 tablet-6 mobile-3">
+{{ page.content }}
+</div>
+<style>
+.hello-tracking {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.hello-tracking h2 {
+  color: #333;
+  font-size: 14px;
+}
+
+.hello-tracking .row .checkpoints ,
+.hello-tracking .row .expected-delivery ,
+.hello-tracking .row .promo {
+  height:500px;
+  line-height: initial;
+}
+
+.hello-tracking .row .checkpoints {
+  overflow: scroll;
+}
+
+.hello-tracking .row .checkpoints ul {
+  margin: 0;
+  padding: 0;
+}
+
+.hello-tracking .row .checkpoints ul li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  clear: both;
+  /*border-top: 1px solid #333;*/
+  padding: 10px 0;
+  display: block;
+  overflow: auto;
+  zoom: 1;
+
+  background-color: #eee;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.hello-tracking .row .checkpoints ul li .dt {
+  width: 100%;
+  font-size: 12px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.hello-tracking .row .checkpoints ul li .icon-wrapper ,
+.hello-tracking .row .checkpoints ul li .status {
+  float: left;
+}
+
+.hello-tracking .row .checkpoints ul li .icon-wrapper {
+  margin-right: 10px;
+}
+
+.hello-tracking .row .checkpoints ul li .status .msg {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+
+.hello-tracking .row .expected-delivery .date {
+/*   background: #bfd4e7; */
+  padding: 30px;
+  border: 4px solid #bfd4e7;
+
+}
+
+.hello-tracking .row .expected-delivery .date .dow {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 22px;
+  display: block;
+}
+
+.hello-tracking .row .expected-delivery .date .mon {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20px;
+  display: block;
+}
+
+.hello-tracking .row .expected-delivery .date .day {
+  font-weight: bold;
+  font-size: 100px;
+  display: block;
+}
+
+.hello-tracking .current-status {
+  clear: both;
+  overflow: auto;
+  zoom: 1;
+}
+
+.hello-tracking .current-status h2 {
+/*   margin-top: 20px;   */
+}
+
+.hello-tracking .current-status .current-status-icon-wrapper {
+  float: left;
+  margin: 4px 13px 0;
+}
+
+.hello-tracking .current-status h3 {
+  font-size: 30px;
+  text-transform: uppercase;
+  float: left;
+}
+
+
+.badge-aftership-container {
+    width: 32px;
+    height: 32px;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    border-radius: 16px;
+    text-align: center
+}
+.badge-aftership-container.inline {
+    display: inline-block;
+    margin-right: 5px
+}
+.badge-aftership-container.small {
+    width: 24px;
+    height: 24px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px
+}
+.badge-aftership-container.delivered {
+    background-color: #27ae60
+}
+.badge-aftership-container.outfordelivery {
+    background-color: #f39c12
+}
+.badge-aftership-container.intransit {
+    background-color: #3498db
+}
+.badge-aftership-container.attemptfail {
+    background-color: #9b59b6
+}
+.badge-aftership-container.exception {
+    background-color: #c0392b
+}
+.badge-aftership-container.expired {
+    background-color: #7f8c8d
+}
+.badge-aftership-container.pending {
+    background-color: #bdc3c7
+}
+.badge-aftership-container.inforeceived {
+    background-color: #35495e
+}
+.bg-aftership-delivered {
+    background-color: #27ae60
+}
+.bg-aftership-outfordelivery {
+    background-color: #f39c12
+}
+.bg-aftership-intransit {
+    background-color: #3498db
+}
+.bg-aftership-attemptfail {
+    background-color: #9b59b6
+}
+.bg-aftership-exception {
+    background-color: #c0392b
+}
+.bg-aftership-expired {
+    background-color: #7f8c8d
+}
+.bg-aftership-pending {
+    background-color: #bdc3c7
+}
+.bg-aftership-inforeceived {
+    background-color: #35495e
+}
+.icon-aftership-tags {
+    background-image: url("https://quiet-wave-63225.herokuapp.com/static/delivery-status-icons_32.png");
+    display: inline-block!important;
+    margin-top: 6px!important;
+    margin-right: 0!important
+}
+.icon-aftership-tags.intransit {
+    width: 22px;
+    height: 21px;
+    background-position: -197px 0
+}
+.icon-aftership-tags.outfordelivery {
+    width: 22px;
+    height: 21px;
+    background-position: -69px 0
+}
+.icon-aftership-tags.delivered {
+    width: 22px;
+    height: 21px;
+    background-position: -5px 0
+}
+.icon-aftership-tags.attemptfail {
+    width: 22px;
+    height: 21px;
+    background-position: -133px 0
+}
+.icon-aftership-tags.exception {
+    width: 22px;
+    height: 21px;
+    background-position: -37px 0
+}
+.icon-aftership-tags.expired {
+    width: 22px;
+    height: 21px;
+    background-position: -101px 0
+}
+.icon-aftership-tags.pending {
+    width: 22px;
+    height: 21px;
+    background-position: -165px 0
+}
+.icon-aftership-tags.inforeceived {
+    width: 22px;
+    height: 21px;
+    background-position: -231px 0
+}
+
+
+</style>
+<script>
+(function(){window["jsLoader"]=function(e,t){var n=document.createElement("script");n.type="text/javascript";n.async=true;n.src=e;var r=false;n.onload=n.onreadystatechange=function(){if(!r&&(!this.readyState||this.readyState==="loaded"||this.readyState==="complete")){r=true;t()}};var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(n,i)}})();
+function trackingComplete(args) {
+  console.log(args);
+    var $widget = $('div.hello-tracking');
+    var $checkpoints = $('.checkpoints ul', $widget);
+    var $currentStatus = $('.expected-delivery .current-status h3', $widget);
+    var $expectedDelivery = $('.expected-delivery div.date', $widget);
+    var $expectedDeliveryDow = $('<span class="dow">');
+    var $expectedDeliveryMon = $('<span class="mon">');
+    var $expectedDeliveryDay = $('<span class="day">');
+
+    // https://www.aftership.com/docs/api/4/delivery-status
+    var trackingStatusMatrix = {
+      'Pending': 'Pending',
+      'InfoReceived': 'InfoReceived',
+      'InTransit': 'InTransit',
+      'OutForDelivery': 'Out for Delivery',
+      'AttemptFail': 'AttemptFail',
+      'Delivered': 'Delivered',
+      'Exception': 'Exception',
+      'Expired': 'Expired',
+    }
+
+    // Process Checkpopints
+    for  (i in args.checkpoints) {
+      var $li = $('<li>');
+      var $icow = $('<div class="icon-wrapper">');
+      var $icoc = $('<div class="badge-aftership-container">');
+      var $ico = $('<i class="icon-aftership-tags">');
+      var $dt = $('<div class="dt">');
+      var $status = $('<div class="status">');
+      var $msg = $('<div class="msg">');
+      var $loc = $('<div class="loc">');
+
+      var checkpoint = args.checkpoints[i];
+      var dt = checkpoint.checkpoint_time;
+
+      statusClass = checkpoint.tag.toLowerCase();
+
+      $icoc.addClass(statusClass);
+      $ico.addClass(statusClass);
+      $icoc.append($ico);
+      $icow.append($icoc);
+
+      $msg.text(checkpoint.message);
+      if(typeof checkpoint.location === 'string'){
+        $loc.text(checkpoint.location);
+      }
+
+      $status.append($msg);
+      $status.append($loc);
+      $dt.append(dt);
+      $li.append($dt);
+      $li.append($icow);
+      $li.append($status);
+      $checkpoints.append($li);
+    }
+
+    // Delivery Date
+    $expectedDeliveryDow.text(args.expected_delivery.dow);
+    $expectedDeliveryMon.text(args.expected_delivery.mon);
+    $expectedDeliveryDay.text(args.expected_delivery.day);
+    $expectedDelivery.append($expectedDeliveryDow);
+    $expectedDelivery.append($expectedDeliveryMon);
+    $expectedDelivery.append($expectedDeliveryDay);
+
+    // Current Status
+    $currentStatus.text(trackingStatusMatrix[args.tag]);
+    currentStatusClass = args.tag.toLowerCase();
+
+
+    $('<div class="current-status-icon-wrapper"><div class="badge-aftership-container '+currentStatusClass+'"><i class="icon-aftership-tags '+currentStatusClass+'">').insertAfter($currentStatus );
+
+  }
+trackingUrl = "https://quiet-wave-63225.herokuapp.com/trackings/"+dastmalchi.urlParams.carrier+"/"+dastmalchi.urlParams.tracking+"/?callback=trackingComplete";
+jsLoader(trackingUrl, function(){});
+
+</script>
