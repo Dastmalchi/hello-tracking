@@ -291,12 +291,16 @@ function trackingComplete(args) {
     }
 
     // Delivery Date
-    $expectedDeliveryDow.text(args.expected_delivery.dow);
-    $expectedDeliveryMon.text(args.expected_delivery.mon);
-    $expectedDeliveryDay.text(args.expected_delivery.day);
-    $expectedDelivery.append($expectedDeliveryDow);
-    $expectedDelivery.append($expectedDeliveryMon);
-    $expectedDelivery.append($expectedDeliveryDay);
+    if(args.expected_delivery !== null){
+      $expectedDeliveryDow.text(args.expected_delivery.dow);
+      $expectedDeliveryMon.text(args.expected_delivery.mon);
+      $expectedDeliveryDay.text(args.expected_delivery.day);
+      $expectedDelivery.append($expectedDeliveryDow);
+      $expectedDelivery.append($expectedDeliveryMon);
+      $expectedDelivery.append($expectedDeliveryDay);
+    } else {
+      $expectedDelivery.hide();
+    }
 
     // Current Status
     $currentStatus.text(trackingStatusMatrix[args.tag]);
