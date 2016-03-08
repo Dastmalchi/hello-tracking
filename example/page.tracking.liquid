@@ -236,12 +236,15 @@
 function trackingComplete(args) {
   console.log(args);
     var $widget = $('div.hello-tracking');
+    var $loader = $('.loader-gif', $loader);
     var $checkpoints = $('.checkpoints ul', $widget);
     var $currentStatus = $('.expected-delivery .current-status h3', $widget);
     var $expectedDelivery = $('.expected-delivery div.date', $widget);
     var $expectedDeliveryDow = $('<span class="dow">');
     var $expectedDeliveryMon = $('<span class="mon">');
     var $expectedDeliveryDay = $('<span class="day">');
+
+    $loader.hide();
 
     // https://www.aftership.com/docs/api/4/delivery-status
     var trackingStatusMatrix = {
@@ -300,6 +303,7 @@ function trackingComplete(args) {
       $expectedDelivery.append($expectedDeliveryDay);
     } else {
       $expectedDelivery.hide();
+      $expectedDelivery.prev().hide();
     }
 
     // Current Status
