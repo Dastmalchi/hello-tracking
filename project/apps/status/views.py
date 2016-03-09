@@ -27,6 +27,7 @@ def trackings(request, carrier_slug, tracking_number):
                 'delivery_time',
                 'active',
                 'shipment_pickup_date',
+                'shipment_delivery_date',
                 'shipment_type',
                 'destination_country_iso3',
                 'created_at',
@@ -54,11 +55,18 @@ def trackings(request, carrier_slug, tracking_number):
             datetime.datetime.strptime(response['shipment_pickup_date'],
                                        '%Y-%m-%dT%H:%M:%S')
 
+    # Fix shipment_delivery_date
+    if response['shipment_delivery_date'] is not None:
+        response['shipment_delivery_date'] = \
+            datetime.datetime.strptime(response['shipment_delivery_date'],
+                                       '%Y-%m-%dT%H:%M:%S')
+
     # Guess the expected delivery for dhl-global-mail
     # when it isn't defined and we have shipment_pickup_date
     if carrier_slug == 'dhl-global-mail' and \
             response['shipment_pickup_date'] is not None and \
-            response['expected_delivery'] is None:
+            response['expected_delivery'] is None and \
+            response['shipment_delivery_date'] is None:
         if response['destination_country_iso3'] == 'USA':
             # USA is 7 days
             response['expected_delivery'] = response['shipment_pickup_date'] \
@@ -67,6 +75,10 @@ def trackings(request, carrier_slug, tracking_number):
             # International is 24 days
             response['expected_delivery'] = response['shipment_pickup_date'] \
                 + datetime.timedelta(days=24)
+
+    # Override expected_delivery when shipment_delivery_date available
+    if response['shipment_delivery_date'] is not None:
+        response['expected_delivery'] = response['shipment_delivery_date']
 
     # Format expected_delivery for display
     if response['expected_delivery'] is not None:
@@ -83,5 +95,6 @@ def trackings(request, carrier_slug, tracking_number):
     # Cleanup response
     del response['shipment_pickup_date']
     del response['destination_country_iso3']
+    del response['shipment_delivery_date']
 
     return response
