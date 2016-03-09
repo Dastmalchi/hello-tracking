@@ -28,6 +28,7 @@ def trackings(request, carrier_slug, tracking_number):
                 'active',
                 'shipment_pickup_date',
                 'shipment_type',
+                'created_at',
                 'tag'])
 
     response = raw_tracking['tracking']
@@ -38,8 +39,9 @@ def trackings(request, carrier_slug, tracking_number):
             del checkpoint['city']
             del checkpoint['zip']
             del checkpoint['country_name']
-            checkpoint['checkpoint_time'] = \
-                checkpoint['checkpoint_time'].strftime("%b %d, %I:%M %p")
+            del checkpoint['coordinates']
+            checkpoint['checkpoint_time'] = utils.format_date_for_display(
+                checkpoint['checkpoint_time'])
             checkpoints.append(checkpoint)
 
     checkpoints.reverse()
@@ -52,10 +54,14 @@ def trackings(request, carrier_slug, tracking_number):
             'day': response['expected_delivery'].strftime("%d")
         }
 
-    response['shipment_pickup_date'] = \
-        datetime.strptime(response['shipment_pickup_date'],
-                          '%Y-%m-%dT%H:%M:%S')
-    response['shipment_pickup_date'] = \
-        response['shipment_pickup_date'].strftime("%b %d, %I:%M %p")
+    response['created_at'] = utils.format_date_for_display(
+        response['created_at'])
+
+    if response['shipment_pickup_date'] is not None:
+        response['shipment_pickup_date'] = \
+            datetime.strptime(response['shipment_pickup_date'],
+                              '%Y-%m-%dT%H:%M:%S')
+        response['shipment_pickup_date'] = utils.format_date_for_display(
+            response['shipment_pickup_date'])
 
     return response

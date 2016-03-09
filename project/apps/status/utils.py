@@ -28,3 +28,8 @@ def json_response(func):
             data = json.dumps(str(objects))
         return HttpResponse(data, "application/json")
     return decorator
+
+
+def format_date_for_display(s):
+    """Format datetime as string for display."""
+    return s.strftime("%b %d, %I:%M %p")
