@@ -4,19 +4,12 @@ from django.shortcuts import render
 from django.conf import settings
 
 import utils
+from datetime import datetime
 import aftership
 
 
-# TODOs
-# Add shipment_pickup_date
-# Add shipment_type
-# Map Shopify carriers to Aftership carriers in JS
-# Sanitize request.GET in template
-
 def index(request):
     """Index."""
-    # import pdb
-    # pdb.set_trace()
     return render(request, 'index.html')
 
 
@@ -33,6 +26,8 @@ def trackings(request, carrier_slug, tracking_number):
                 'expected_delivery',
                 'delivery_time',
                 'active',
+                'shipment_pickup_date',
+                'shipment_type',
                 'tag'])
 
     response = raw_tracking['tracking']
@@ -56,5 +51,11 @@ def trackings(request, carrier_slug, tracking_number):
             'mon': response['expected_delivery'].strftime("%b"),
             'day': response['expected_delivery'].strftime("%d")
         }
+
+    response['shipment_pickup_date'] = \
+        datetime.strptime(response['shipment_pickup_date'],
+                          '%Y-%m-%dT%H:%M:%S')
+    response['shipment_pickup_date'] = \
+        response['shipment_pickup_date'].strftime("%b %d, %I:%M %p")
 
     return response
