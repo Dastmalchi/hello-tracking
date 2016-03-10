@@ -285,18 +285,6 @@ function trackingComplete(args) {
     }
 
     // Process Checkpopints
-    if (args.checkpoints.length === 0) {
-      args.checkpoints.push({
-        'checkpoint_time': args.created_at,
-        'coordinates': '',
-        'country_iso3': '',
-        'location': 'USA',
-        'message': 'Tracking Pending',
-        'state': '',
-        'tag': 'Pending',
-      });
-    }
-
     for  (i in args.checkpoints) {
       var $li = $('<li>');
       var $icow = $('<div class="icon-wrapper">');

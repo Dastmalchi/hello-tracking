@@ -8,6 +8,10 @@ import datetime
 import aftership
 
 
+# TODOs
+# Carrier display name
+
+
 def index(request):
     """Index."""
     return render(request, 'index.html')
@@ -18,31 +22,55 @@ def trackings(request, carrier_slug, tracking_number):
     """Checkpoints."""
     api = aftership.APIv4(getattr(settings, "AFTERSHIP_API_KEY", None))
     checkpoints = []
-    raw_tracking = api.trackings.get(
-        carrier_slug,
-        tracking_number,
-        fields=['title',
-                'checkpoints',
-                'expected_delivery',
-                'delivery_time',
-                'active',
-                'shipment_pickup_date',
-                'shipment_delivery_date',
-                'shipment_type',
-                'destination_country_iso3',
-                'created_at',
-                'tag'])
-
-    response = raw_tracking['tracking']
+    try:
+        raw_tracking = api.trackings.get(
+            carrier_slug,
+            tracking_number,
+            fields=['title',
+                    'checkpoints',
+                    'expected_delivery',
+                    'delivery_time',
+                    'active',
+                    'shipment_pickup_date',
+                    'shipment_delivery_date',
+                    'shipment_type',
+                    'destination_country_iso3',
+                    'destination_country_iso3',
+                    'created_at',
+                    'tag'])
+        response = raw_tracking['tracking']
+    except aftership.APIv4RequestException, e:
+        print e
+        # Create dummy response
+        response = {
+            'checkpoints': [{
+                'checkpoint_time': datetime.datetime.now(),
+                'coordinates': '',
+                'country_iso3': '',
+                'location': 'CA, USA',
+                'message': 'Tracking number not found. Please try back later.',
+                'state': '',
+                'tag': 'Exception',
+            }],
+            'shipment_pickup_date': None,
+            'shipment_delivery_date': None,
+            'expected_delivery': None,
+            'created_at': None,
+            'destination_country_iso3': None,
+            'tag': 'Exception',
+        }
 
     # Process checkpoints
     for checkpoint in response['checkpoints']:
-            del checkpoint['created_at']
-            del checkpoint['slug']
-            del checkpoint['city']
-            del checkpoint['zip']
-            del checkpoint['country_name']
-            del checkpoint['coordinates']
+            try:
+                del checkpoint['created_at']
+                del checkpoint['slug']
+                del checkpoint['city']
+                del checkpoint['zip']
+                del checkpoint['country_name']
+                del checkpoint['coordinates']
+            except Exception, e:
+                pass
             checkpoint['checkpoint_time'] = utils.format_date_for_display(
                 checkpoint['checkpoint_time'])
             checkpoints.append(checkpoint)
@@ -89,8 +117,23 @@ def trackings(request, carrier_slug, tracking_number):
         }
 
     # Format created_at for display
-    response['created_at'] = utils.format_date_for_display(
-        response['created_at'])
+    if response['created_at'] is not None:
+        response['created_at'] = utils.format_date_for_display(
+            response['created_at'])
+
+    # Handle no checkpoints
+    if len(response['checkpoints']) is 0:
+        response['checkpoints'].append({
+            'checkpoint_time': response['created_at'],
+            'coordinates': '',
+            'country_iso3': '',
+            'location': 'CA, USA',
+            'message': 'Tracking Pending. Please try back later.',
+            'state': '',
+            'tag': 'Pending',
+        })
+
+    response['carrier'] = utils.get_carrier_name(carrier_slug)
 
     # Cleanup response
     del response['shipment_pickup_date']
