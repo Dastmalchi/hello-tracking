@@ -12,6 +12,10 @@
   font-size: 14px;
 }
 
+.hello-tracking h2.carrier {
+  margin-top: 16px;
+}
+
 .hello-tracking .row .checkpoints ,
 .hello-tracking .row .expected-delivery ,
 .hello-tracking .row .promo {
@@ -243,11 +247,11 @@
 <script>
 (function(){window["jsLoader"]=function(e,t){var n=document.createElement("script");n.type="text/javascript";n.async=true;n.src=e;var r=false;n.onload=n.onreadystatechange=function(){if(!r&&(!this.readyState||this.readyState==="loaded"||this.readyState==="complete")){r=true;t()}};var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(n,i)}})();
 function trackingComplete(args) {
-  console.log(args);
     var $widget = $('div.hello-tracking');
     var $loader = $('.loader-gif', $loader);
     var $checkpoints = $('.checkpoints ul', $widget);
     var $currentStatus = $('.expected-delivery .current-status h3', $widget);
+    var $carrierDetails = $('.carrier-details', $widget);
     var $expectedDelivery = $('.expected-delivery div.date', $widget);
     var $expectedDeliveryDow = $('<span class="dow">');
     var $expectedDeliveryMon = $('<span class="mon">');
@@ -319,6 +323,12 @@ function trackingComplete(args) {
     $currentStatus.text(trackingStatusMatrix[args.tag]);
     currentStatusClass = args.tag.toLowerCase();
 
+    // Set carrier
+    $carrierDetailsP = $("<p>").text(args.carrier);
+    if(args.shipment_type !== null){
+      $carrierDetailsP.append(" - " + args.shipment_type);
+    }
+    $carrierDetails.append($carrierDetailsP);
 
     $('<div class="current-status-icon-wrapper"><div class="badge-aftership-container '+currentStatusClass+'"><i class="icon-aftership-tags '+currentStatusClass+'">').insertAfter($currentStatus );
 
