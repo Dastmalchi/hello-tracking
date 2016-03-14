@@ -1,0 +1,29 @@
+{% comment %}
+This needs to be added anywhere you want to replace the tracking URL.
+{% endcomment %}
+
+{% if line_item.fulfillment.tracking_number %}
+  {% case line_item.fulfillment.tracking_company %}
+      {% when 'Australia Post' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=australia-post&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% when 'Canada Post' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=canada-post&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% when 'DHL eCommerce' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=dhl-global-mail&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% when 'FedEx' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=fedex&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% when 'New Zealand Post' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=new-zealand-post&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% when 'Purolator' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=purolator&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% when 'Royal Mail' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=royal-mail&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% when 'TNT' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=tnt&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% when 'USPS' %}
+          {% assign custom_tracking_url = '/pages/status/?carrier=usps&tracking=' | append: line_item.fulfillment.tracking_number %}
+      {% else %}
+          {% assign custom_tracking_url = line_item.fulfillment.tracking_url %}
+  {% endcase %}
+  <a href="{{ custom_tracking_url }}">{{ line_item.fulfillment.tracking_company }} #{{ line_item.fulfillment.tracking_number}}
+{% endif %}

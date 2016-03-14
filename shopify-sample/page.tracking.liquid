@@ -242,7 +242,6 @@
   height: auto;
   margin-bottom: 20px;
 }
-
 </style>
 <script>
 (function(){window["jsLoader"]=function(e,t){var n=document.createElement("script");n.type="text/javascript";n.async=true;n.src=e;var r=false;n.onload=n.onreadystatechange=function(){if(!r&&(!this.readyState||this.readyState==="loaded"||this.readyState==="complete")){r=true;t()}};var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(n,i)}})();
@@ -262,10 +261,10 @@ function trackingComplete(args) {
     // https://www.aftership.com/docs/api/4/delivery-status
     var trackingStatusMatrix = {
       'Pending': 'Pending',
-      'InfoReceived': 'InfoReceived',
-      'InTransit': 'InTransit',
+      'InfoReceived': 'Info Received',
+      'InTransit': 'In Transit',
       'OutForDelivery': 'Out for Delivery',
-      'AttemptFail': 'AttemptFail',
+      'AttemptFail': 'Attempt Fail',
       'Delivered': 'Delivered',
       'Exception': 'Exception',
       'Expired': 'Expired',
@@ -335,5 +334,4 @@ function trackingComplete(args) {
   }
 trackingUrl = "https://quiet-wave-63225.herokuapp.com/trackings/"+dastmalchi.urlParams.carrier+"/"+dastmalchi.urlParams.tracking+"/?callback=trackingComplete";
 jsLoader(trackingUrl, function(){});
-
 </script>

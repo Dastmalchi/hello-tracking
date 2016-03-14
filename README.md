@@ -1,51 +1,24 @@
-# python-getting-started
+# Hello Tracking - AfterShip/Shopify
 
-A barebones Python app, which can easily be deployed to Heroku.
+## Summary
 
-This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.
+This app provides data from the AfterShip API as a JSONP response to be consumed by a front-end application on Shopify.
 
-## Running Locally
+## Hosting
 
-Make sure you have Python [installed properly](http://install.python-guide.org).  Also, install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
+The application is written in Django and hosted on Heroku as `quiet-wave-63225`. Deploys are done manually from the `master` branch of `Dastmalchi/hello-tracking`.
 
-```sh
-$ git clone git@github.com:heroku/python-getting-started.git
-$ cd python-getting-started
+### Configuration
 
-$ pip install -r requirements.txt
-
-$ createdb python_getting_started
-
-$ python manage.py migrate
-$ python manage.py collectstatic
-
-$ heroku local
-```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```sh
-$ heroku create
-$ git push heroku master
-
-$ heroku run python manage.py migrate
-$ heroku open
-```
-or
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-## Documentation
-
-For more information about using Python on Heroku, see these Dev Center articles:
-
-- [Python on Heroku](https://devcenter.heroku.com/categories/python)
+* The AfterShip API key is set as and environment variable as `AFTERSHIP_API_KEY`. 
+* Shopify carriers are manually mapped in the liquid templates for customer order details and email. At this time there isn't a better way to do this. This means that if a new Shopify carrier is added (or Shipwire is pushing new carriers into `tracking_company`) then additional mappings will need to be made anywhere the tracking link appears. If a carrier is missing, a fallback to Shopify's tracking URL is used. 
+* The tracking page itself is added using the Shopify CMS and a custom page template. Both are included in `/shopify-samples`.
+* Customization to the order details template and email notifications needs to be made to deploy. See the example in `customer.order.liquid`.
 
 
-# Notes
+##  Notes
 
-Need to set enviroment vars ....
-AFTERSHIP_API_KEY
-
+* Most of the application logic is in the Django view. This needs to be moved.
+* All checkpoint data is returned and specific properties are popped off. This could be a problem if sensitive data is added to the response in the future. Only data that is needed should be returned.
+* Dates from AfterShip's pip package were not consistent. i.e. Varying string format dates and some datetime.
+* AfterShip just added estimated delivery for DHL eCommerce so our guessing method shouldn't be needed but it left as a fallback.
